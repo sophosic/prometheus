@@ -14,7 +14,10 @@ RUN sed -i "s/RENDER_SERVICE_NAME/${RENDER_SERVICE_NAME}/g" /etc/prometheus/prom
 
 # Sets the storage path to your persistent disk path,
 # plus other config
+# NOTE: --web.enable-remote-write-receiver enables Render metrics streaming
+# This exposes /api/v1/write endpoint for external metrics push
 CMD [ "--storage.tsdb.path=/var/data/prometheus", \
       "--config.file=/etc/prometheus/prometheus.yml", \
       "--web.console.libraries=/usr/share/prometheus/console_libraries", \
-      "--web.console.templates=/usr/share/prometheus/consoles" ]
+      "--web.console.templates=/usr/share/prometheus/consoles", \
+      "--web.enable-remote-write-receiver" ]
