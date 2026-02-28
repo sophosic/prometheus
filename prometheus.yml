@@ -8,7 +8,7 @@ scrape_configs:
   # Prometheus self-monitoring
   - job_name: 'prometheus'
     dns_sd_configs:
-      - names: ['RENDER_SERVICE_NAME-discovery']
+      - names: ['sophosic-prometheus-discovery']
         port: 9090
         type: A
         refresh_interval: 5s
@@ -24,3 +24,12 @@ scrape_configs:
     metrics_path: /metrics
     # Longer timeout for potentially slow metrics collection
     scrape_timeout: 10s
+
+  # Grafana Loki - Log aggregation metrics
+  - job_name: 'sophosic-loki'
+    dns_sd_configs:
+      - names: ['sophosic-loki-discovery']
+        port: 3100
+        type: A
+        refresh_interval: 5s
+    metrics_path: /metrics
