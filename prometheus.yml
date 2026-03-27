@@ -1,6 +1,6 @@
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+  scrape_interval: 30s
+  evaluation_interval: 30s
 
 # Scrape configuration for Sophosic Platform
 scrape_configs:
@@ -11,18 +11,17 @@ scrape_configs:
       - names: ['sophosic-prometheus-discovery']
         port: 9090
         type: A
-        refresh_interval: 5s
+        refresh_interval: 15s
 
   # Sophosic API Backend - FastAPI with custom Prometheus metrics
   # Exposes: HTTP metrics, DB metrics, Redis metrics, External API metrics, Streaming metrics
   - job_name: 'sophosic-api'
     dns_sd_configs:
-      - names: ['sophosic-api-gksh-discovery']
+      - names: ['sophosic-api-discovery']
         port: 10000
         type: A
-        refresh_interval: 5s
+        refresh_interval: 15s
     metrics_path: /metrics
-    # Longer timeout for potentially slow metrics collection
     scrape_timeout: 10s
 
   # Grafana Loki - Log aggregation metrics
@@ -31,5 +30,5 @@ scrape_configs:
       - names: ['sophosic-loki-discovery']
         port: 3100
         type: A
-        refresh_interval: 5s
+        refresh_interval: 15s
     metrics_path: /metrics

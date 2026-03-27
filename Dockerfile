@@ -7,16 +7,13 @@ FROM prom/prometheus:v${PROMETHEUS_VERSION}
 # Apply this repo's prometheus.yml file
 ADD prometheus.yml /etc/prometheus/
 
-# Sets the Render service name in prometheus.yml
-# using the RENDER_SERVICE_NAME environment variable
-ARG RENDER_SERVICE_NAME
-RUN sed -i "s/RENDER_SERVICE_NAME/${RENDER_SERVICE_NAME}/g" /etc/prometheus/prometheus.yml
-
-# Sets the storage path to your persistent disk path,
-# plus other config
-# NOTE: --web.enable-remote-write-receiver enables Render metrics streaming
-# This exposes /api/v1/write endpoint for external metrics push
+# Storage and retention configuration for 1GB disk
+# --storage.tsdb.retention.size=800MB keeps ~200MB headroom for compaction
+# --storage.tsdb.wal-compression reduces WAL disk usage
 CMD [ "--storage.tsdb.path=/var/data/prometheus", \
+      "--storage.tsdb.retention.time=7d", \
+      "--storage.tsdb.retention.size=800MB", \
+      "--storage.tsdb.wal-compression", \
       "--config.file=/etc/prometheus/prometheus.yml", \
       "--web.console.libraries=/usr/share/prometheus/console_libraries", \
       "--web.console.templates=/usr/share/prometheus/consoles", \
