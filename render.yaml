@@ -1,17 +1,24 @@
 # Configuration for deploying this project
 # via Render Blueprints
 services:
-- type: web
-  name: prometheus
-  runtime: docker
-  plan: starter
-  disk:
-    name: prometheus-disk
-    mountPath: /var/data
-    sizeGB: 1
+  - type: pserv
+    name: sophosic-prometheus
+    # Render cannot mutate an existing web service to pserv in place.
+    # private service identity: sophosic-prometheus
+    # Manual delete/import cutover required: delete or rename the former
+    # Render web service named prometheus before importing this blueprint,
+    # so Render creates a new private service instead of attempting an
+    # unsupported in-place type mutation.
+    runtime: docker
+    plan: starter
+    region: ohio
+    disk:
+      name: prometheus-disk
+      mountPath: /var/data
+      sizeGB: 1
 
-  # Uncomment to scale the number of instances.
-  # Requires enabling scaling for disk-backed services
-  # in the Render Dashboard.
-  #
-  # numInstances: 2
+    # Uncomment to scale the number of instances.
+    # Requires enabling scaling for disk-backed services
+    # in the Render Dashboard.
+    #
+    # numInstances: 2
